@@ -18,6 +18,9 @@
 	fetch("https://api.github.com/repos/mckuhei/mckuhei/contents/NBSArchive").then(r => r.json()).then(json => {
 		const table = document.getElementById('file')
 		json.forEach(element => {
+			if (!element.name.endsWith(".nbs")) {
+				return
+			}
 			const tr = document.createElement("tr")
 			const fl = document.createElement("a")
 			const pl = document.createElement("a")
