@@ -1,63 +1,164 @@
-<!DOCTYPE html>
+<!doctype html>
+<!--
+	WARNING: SHIT CODE.
+	author ceeyourbac
+-->
 <html>
-<head>
-	<meta charset="utf-8">
-	<title>NBSArchive</title>
-</head>
-<body>
-<noscript><h1>Enable JavaScript.</h1></noscript>
-<table id="file" border="1">
-	<tr>
-		<th>File</th>
-		<th>MIDI</th>
-		<th>Play</th>
-		<th>Size</th>
-	</tr>
-</table>
-<script type="text/javascript">
-	fetch("https://api.github.com/repos/mckuhei/mckuhei/contents/NBSArchive").then(r => r.json()).then(json => {
-		const table = document.getElementById('file')
-		json.forEach(element => {
-			if (!element.name.endsWith(".nbs")) {
-				return
-			}
-			const tr = document.createElement("tr")
-			const fl = document.createElement("a")
-			const pl = document.createElement("a")
-			let th = document.createElement("th")
-			tr.id = element.name
-			fl.href = element.download_url
-			fl.innerText = element.name
-			pl.href = "https://mckuhei.github.io/WebNBS/?fromURL="+element.download_url
-			pl.innerText = "Play"
-			th.appendChild(fl)
-			tr.appendChild(th)
-			th = document.createElement("th")
-			th.innerText = "Unavailable"
-			tr.appendChild(th)
-			th = document.createElement("th")
-			th.appendChild(pl)
-			tr.appendChild(th)
-			th = document.createElement("th")
-			th.innerText = element.size + " Bytes"
-			tr.appendChild(th)
-			table.appendChild(tr)
-		})
-		fetch("midi.json").then(r => r.json()).then(json => {
-			json.forEach(element => {
-				let ele = document.getElementById(element.name)
-				if (!ele) {
-					return
-				}
-				ele = ele.querySelector("th:nth-child(2)")
-				ele.innerText = ""
-				const link = document.createElement("a")
-				link.href = "../MIDIArchive/"+element.midi
-				link.innerText = "Download"// element.midi
-				ele.appendChild(link)
-			})
-		})
-	})
-</script>
-</body>
+    <head>
+        <meta charset="utf-8">
+        <title>NBSArchive</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="index_files/font-awesome.min.css" rel="stylesheet">
+        <link href="index_files/Untitled1.css" rel="stylesheet">
+        <link href="index_files/index.css" rel="stylesheet">
+        <script src="index_files/jquery-1.12.4.min.js"></script>
+        <script src="index_files/jquery-ui.min.js"></script>
+        <script src="index_files/popper.min.js"></script>
+        <script src="index_files/util.min.js"></script>
+        <script src="index_files/collapse.min.js"></script>
+        <script src="index_files/dropdown.min.js"></script>
+        <script src="index_files/wb.parallax.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $("a[href*='#header']").click(function(event) {
+                    event.preventDefault();
+                    $('html, body').stop().animate({
+                        scrollTop: $('#wb_header').offset().top
+                    }, 600, 'easeOutSine');
+                });
+                $('#ThemeableMenu1 .dropdown-toggle').dropdown({
+                    popperConfig: {
+                        placement: 'bottom-start',
+                        modifiers: {
+                            computeStyle: {
+                                gpuAcceleration: false
+                            }
+                        }
+                    }
+                });
+                $(document).on('click', '.ThemeableMenu1-navbar-collapse.show', function(e) {
+                    if ($(e.target).is('a') && ($(e.target).attr('class') != 'dropdown-toggle')) {
+                        $(this).collapse('hide');
+                    }
+                });
+                $('#wb_LayoutGrid5').parallax();
+            });
+        </script>
+    </head>
+    <body>
+        <div id="wb_header">
+            <div id="header">
+                <div class="row">
+                    <div class="col-1">
+                        <div id="wb_ThemeableMenu1" style="display:inline-block;width:100%;z-index:0;">
+                            <div id="ThemeableMenu1" class="ThemeableMenu1" style="width:100%;height:auto !important;">
+                                <div class="container">
+                                    <a id="ThemeableMenu1-logo" href="#">
+                                    </a>
+                                    <div class="navbar-header">
+                                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".ThemeableMenu1-navbar-collapse">
+                                            <span class="icon-bar"></span>
+                                            <span class="icon-bar"></span>
+                                            <span class="icon-bar"></span>
+                                        </button>
+                                    </div>
+                                    <div class="ThemeableMenu1-navbar-collapse collapse">
+                                        <ul class="nav navbar-nav">
+                                            <li class="nav-item">
+                                                <a href="#skills" class="nav-link">
+                                                    <i class="fa fa-dropbox"></i>
+                                                    NBSArchive
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="https://mckuhei.github.io/WebNBS" class="nav-link">
+                                                    <i class="fa fa-edit"></i>
+                                                    NBS Studio online
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="wb_LayoutGrid5">
+            <div id="LayoutGrid5-overlay"></div>
+            <div id="LayoutGrid5">
+                <div class="row">
+                    <div class="col-1">
+                        <div id="wb_Heading5" style="display:inline-block;width:100%;z-index:1;">
+                            <h1 id="Heading5">NBS Archive</h1>
+                        </div>
+                        <div id="wb_Heading6" style="display:inline-block;width:100%;z-index:2;">
+                            <h2 id="Heading6">Get the note block studio project sample of minecraft, and use the web NBS studio to view it</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <center>
+            <table id="StripedTable">
+                <tr class="cell0">
+                    <th>File</th>
+                    <th>MIDI</th>
+                    <th>Play</th>
+                    <th>Size</th>
+                </tr>
+            </table>
+        </center>
+        <script type="text/javascript">
+            fetch("https://api.github.com/repos/mckuhei/mckuhei/contents/NBSArchive").then(r=>r.json()).then(json=>{
+                const table = document.getElementById('StripedTable')
+                json.forEach(element=>{
+                    if (!element.name.endsWith(".nbs")) {
+                        return
+                    }
+                    const tr = document.createElement("tr")
+                    const fl = document.createElement("a")
+                    const pl = document.createElement("a")
+                    let th = document.createElement("th")
+                    tr.id = element.name
+                    fl.href = element.download_url
+                    fl.innerText = element.name
+                    pl.href = "https://mckuhei.github.io/WebNBS/?fromURL=" + element.download_url
+                    pl.innerText = "Play"
+                    th.appendChild(fl)
+                    tr.appendChild(th)
+                    th = document.createElement("th")
+                    th.innerText = "Unavailable"
+                    tr.appendChild(th)
+                    th = document.createElement("th")
+                    th.appendChild(pl)
+                    tr.appendChild(th)
+                    th = document.createElement("th")
+                    th.innerText = element.size + " Bytes"
+                    tr.appendChild(th)
+                    table.appendChild(tr)
+                }
+                )
+                fetch("midi.json").then(r=>r.json()).then(json=>{
+                    json.forEach(element=>{
+                        let ele = document.getElementById(element.name)
+                        if (!ele) {
+                            return
+                        }
+                        ele = ele.querySelector("th:nth-child(2)")
+                        ele.innerText = ""
+                        const link = document.createElement("a")
+                        link.href = "../MIDIArchive/" + element.midi
+                        link.innerText = "Download"
+                        // element.midi
+                        ele.appendChild(link)
+                    }
+                    )
+                }
+                )
+            }
+            )
+        </script>
+    </body>
 </html>
