@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>NBSArchive</title>
+</head>
+<body>
+<noscript><h1>Enable JavaScript.</h1></noscript>
+<table id="file" border="1">
+	<tr>
+		<th>File</th>
+		<th>MIDI</th>
+		<th>Play</th>
+		<th>Size</th>
+	</tr>
+</table>
+<script type="text/javascript">
+	fetch("https://api.github.com/repos/mckuhei/mckuhei/contents/NBSArchive").then(r => r.json()).then(json => {
+		const table = document.getElementById('file')
+		json.forEach(element => {
+			const tr = document.createElement("tr")
+			const fl = document.createElement("a")
+			const pl = document.createElement("a")
+			let th = document.createElement("th")
+			tr.id = element.name
+			fl.href = element.download_url
+			fl.innerText = element.name
+			pl.href = "https://mckuhei.github.io/WebNBS/?fromURL="+element.download_url
+			pl.innerText = "Play"
+			th.appendChild(fl)
+			tr.appendChild(th)
+			th = document.createElement("th")
+			th.innerText = "Unavailable"
+			tr.appendChild(th)
+			th = document.createElement("th")
+			th.appendChild(pl)
+			tr.appendChild(th)
+			th = document.createElement("th")
+			th.innerText = element.size + " Bytes"
+			tr.appendChild(th)
+			table.appendChild(tr)
+		})
+	})
+</script>
+</body>
+</html>
