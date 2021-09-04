@@ -8,7 +8,7 @@ div#container
 body
 {
    background-color: #FFFFFF;
-   background-image: url('/imgs/bg-wool-dark.png');
+   background-image: url('../imgs/bg-wool-dark.png');
    background-attachment: scroll;
    background-position: left top;
    background-repeat: repeat;
@@ -663,7 +663,7 @@ input:focus, textarea:focus, select:focus
    text-align: center;
    width: 100%;
    background-color: transparent;
-   background-image: url('/imgs/NBS.jfif');
+   background-image: url('../imgs/NBS.jfif');
    background-repeat: space;
    background-position: center center;
    background-attachment: fixed;
