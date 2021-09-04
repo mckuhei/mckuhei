@@ -43,6 +43,20 @@
 			tr.appendChild(th)
 			table.appendChild(tr)
 		})
+		fetch("midi.json").then(r => r.json()).then(json => {
+			json.forEach(element => {
+				let ele = document.getElementById(element.name)
+				if (!ele) {
+					return
+				}
+				ele = ele.querySelector("th:nth-child(2)")
+				ele.innerText = ""
+				const link = document.createElement("a")
+				link.href = "../MIDIArchive/"+element.midi
+				link.innerText = "Download"// element.midi
+				ele.appendChild(link)
+			})
+		})
 	})
 </script>
 </body>
