@@ -1,6 +1,6 @@
 ### Hi there 👋
 
-I'm not author of Minecraft 1.2.3_06. 1.2.3_06's author is @AKNoodles. I just a Python programmer. I'm not good at java.
+I'm not author of Minecraft 1.2.3_06. 1.2.3_06's author is [AKNoodles](https://www.github.com/AKNoodles). I just a Python programmer. I'm not good at java.
 <!--
 **mckuhei/mckuhei** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
