@@ -122,9 +122,9 @@
                     const pl = document.createElement("a")
                     let th = document.createElement("th")
                     tr.id = element.name
-                    fl.href = element.download_url
+                    fl.href = element.name
                     fl.innerText = element.name
-                    pl.href = "https://mckuhei.github.io/WebNBS/?fromURL=" + element.download_url
+                    pl.href = "https://mckuhei.github.io/WebNBS/?fromURL=https://www.mckuhei.ml/NBSArchive/" + element.name
                     pl.innerText = "Play"
                     th.appendChild(fl)
                     tr.appendChild(th)
