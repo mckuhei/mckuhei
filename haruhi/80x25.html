@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+</head>
+<body>
+	<input type="button" id="button" value="Loading..." disabled="true" />
+	<br>
+	<canvas id="canvas" width="640" height="400"></canvas>
+	<audio id="audio" src="haruhi.mp3" preload="true"></audio>
+	<script type="text/javascript">
+		class FontRenderer {
+			constructor(file,canvas) {
+				this.font = {}
+				this.buf = new Uint8Array(80*25*2) // video memory
+				this.canvas = canvas
+				this.ctx = canvas.getContext("2d")
+				fetch(file).then(r => r.text()).then(text => {
+					let lst = text.split("\n")
+					for(const line of lst) {
+						const fnt = document.createElement("canvas")
+						fnt.width = 8
+						fnt.height = 16
+						const ctx = fnt.getContext("2d")
+						ctx.fillStyle = "#000000"
+						ctx.fillRect(0,0,8,16)
+						ctx.fillStyle = "#FFFFFF"
+						const l = line.split(":")
+						const id = parseInt(l[0],16)
+						for (var i = 0; i < 16; i++) {
+							const byte = parseInt(l[1].substr(i*2,2),16)
+							for (var j = 0; j < 8; j++) {
+								const bit = Math.floor(byte/Math.pow(2,8-j))%2
+								if (bit) {
+									ctx.fillRect(j,i,1,1)
+								}
+							}
+						}
+						this.font[id] = fnt
+					}
+				})
+			}
+			rgb2str(rgb) {
+				const r = rgb >> 16
+				const g = (r << 8) ^ (rgb >> 8)
+				const b = ((r << 16) ^ (g << 8)) ^ rgb
+				return `rgb(${r},${g},${b})`
+			}
+			renderChar(ch,x,y,color) {
+				if (ch==this.buf[y*80+x]&&color==this.buf[y*80+x+80*25])
+					return
+				this.ctx.globalCompositeOperation = 'source-over'
+				this.ctx.drawImage(this.font[ch],x*8,y*16)
+				this.ctx.globalCompositeOperation = "darken"
+				this.ctx.fillStyle=this.rgb2str(pattern[color])
+				this.ctx.fillRect(x*8,y*16,8,16)
+				this.buf[y*80+x] = ch
+				this.buf[y*80+x+80*25] = color
+			}
+		}
+		const fr = new FontRenderer("font.hex",document.getElementById('canvas'))
+		const pattern=[263172, 526344, 789516, 1052688, 1315860, 1579032, 1842204, 2105376, 2368548, 2631720, 2894892, 3158064, 3421236, 3684408, 3947580, 4210752, 0, 9216, 18688, 27904, 37376, 46592, 56064, 65280, 3342336, 3351552, 3361024, 3370240, 3379712, 3388928, 3398400, 3407616, 6684672, 6693888, 6703360, 6712576, 6722048, 6731264, 6740736, 6749952, 10027008, 10036224, 10045696, 10054912, 10064384, 10073600, 10083072, 10092288, 13369344, 13378560, 13388032, 13397248, 13406720, 13415936, 13425408, 13434624, 16711680, 16720896, 16730368, 16739584, 16749056, 16758272, 16767744, 16776960, 64, 9280, 18752, 27968, 37440, 46656, 56128, 65344, 3342400, 3351616, 3361088, 3370304, 3379776, 3388992, 3398464, 3407680, 6684736, 6693952, 6703424, 6712640, 6722112, 6731328, 6740800, 6750016, 10027072, 10036288, 10045760, 10054976, 10064448, 10073664, 10083136, 10092352, 13369408, 13378624, 13388096, 13397312, 13406784, 13416000, 13425472, 13434688, 16711744, 16720960, 16730432, 16739648, 16749120, 16758336, 16767808, 16777024, 128, 9344, 18816, 28032, 37504, 46720, 56192, 65408, 3342464, 3351680, 3361152, 3370368, 3379840, 3389056, 3398528, 3407744, 6684800, 6694016, 6703488, 6712704, 6722176, 6731392, 6740864, 6750080, 10027136, 10036352, 10045824, 10055040, 10064512, 10073728, 10083200, 10092416, 13369472, 13378688, 13388160, 13397376, 13406848, 13416064, 13425536, 13434752, 16711808, 16721024, 16730496, 16739712, 16749184, 16758400, 16767872, 16777088, 191, 9407, 18879, 28095, 37567, 46783, 56255, 65471, 3342527, 3351743, 3361215, 3370431, 3379903, 3389119, 3398591, 3407807, 6684863, 6694079, 6703551, 6712767, 6722239, 6731455, 6740927, 6750143, 10027199, 10036415, 10045887, 10055103, 10064575, 10073791, 10083263, 10092479, 13369535, 13378751, 13388223, 13397439, 13406911, 13416127, 13425599, 13434815, 16711871, 16721087, 16730559, 16739775, 16749247, 16758463, 16767935, 16777151, 255, 9471, 18943, 28159, 37631, 46847, 56319, 65535, 3342591, 3351807, 3361279, 3370495, 3379967, 3389183, 3398655, 3407871, 6684927, 6694143, 6703615, 6712831, 6722303, 6731519, 6740991, 6750207, 10027263, 10036479, 10045951, 10055167, 10064639, 10073855, 10083327, 10092543, 13369599, 13378815, 13388287, 13397503, 13406975, 13416191, 13425663, 13434879, 16711935, 16721151, 16730623, 16739839, 16749311, 16758527, 16767999, 16777215]
+
+		const xhr = new XMLHttpRequest()
+		const btn = document.getElementById('button')
+		const audio = document.getElementById('audio')
+		xhr.open('GET',"haruhi_80x25.dat")
+		xhr.responseType = "arraybuffer"
+		xhr.addEventListener("progress",e => {
+			btn.value = `Loading... ${parseInt((e.loaded / e.total)*100)}%`
+		})
+		xhr.onerror = function () {
+			btn.value = "ERROR"
+		}
+		xhr.addEventListener("load",e => {
+			const buf = new Uint8Array(xhr.response)
+			let interval = -1;
+			btn.onclick = function() {
+				audio.pause()
+				audio.currentTime = 0
+				audio.play()
+				let current = 0
+				clearInterval(interval)
+				interval = setInterval(() => {
+					if (current>=buf.length) 
+						clearInterval(interval)
+					for (var y = 0; y < 25; y++) {
+						for (var x = 0; x < 80; x++) {
+							fr.renderChar(buf[current++],x,y,buf[current++])
+						}
+					}
+				},1000/30)
+			}
+			btn.disabled = false
+			btn.value = "Play"
+		})
+		xhr.send()
+	</script>
+</body>
+</html>

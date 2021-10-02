@@ -5,13 +5,16 @@
 	<title></title>
 </head>
 <body>
-	<canvas id="canvas" width="1280" height="720"></canvas>
 	<input type="button" id="button" value="Loading..." disabled="true" />
+	<a href="80x25.html">Too lag?</a>
+	<br>
+	<canvas id="canvas" width="1280" height="720"></canvas>
 	<audio id="audio" src="haruhi.mp3" preload="true"></audio>
 	<script type="text/javascript">
 		class FontRenderer {
 			constructor(file,canvas) {
 				this.font = {}
+				this.buf = new Uint8Array(160*45*2) // video memory
 				this.canvas = canvas
 				this.ctx = canvas.getContext("2d")
 				fetch(file).then(r => r.text()).then(text => {
@@ -46,11 +49,15 @@
 				return `rgb(${r},${g},${b})`
 			}
 			renderChar(ch,x,y,color) {
+				if (ch==this.buf[y*160+x]&&color==this.buf[y*160+x+160*45])
+					return
 				this.ctx.globalCompositeOperation = 'source-over'
-				this.ctx.drawImage(this.font[ch],x,y)
+				this.ctx.drawImage(this.font[ch],x*8,y*16)
 				this.ctx.globalCompositeOperation = "darken"
-				this.ctx.fillStyle=this.rgb2str(color)
-				this.ctx.fillRect(x,y,8,16)
+				this.ctx.fillStyle=this.rgb2str(pattern[color])
+				this.ctx.fillRect(x*8,y*16,8,16)
+				this.buf[y*160+x] = ch
+				this.buf[y*160+x+160*45] = color
 			}
 		}
 		const fr = new FontRenderer("font.hex",document.getElementById('canvas'))
@@ -81,7 +88,7 @@
 						clearInterval(interval)
 					for (var y = 0; y < 45; y++) {
 						for (var x = 0; x < 160; x++) {
-							fr.renderChar(buf[current++],x*8,y*16,pattern[buf[current++]])
+							fr.renderChar(buf[current++],x,y,buf[current++])
 						}
 					}
 				},1000/30)
